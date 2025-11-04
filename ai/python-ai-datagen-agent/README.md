@@ -1,4 +1,4 @@
-Python AI Agent Project
+Python AI DataGen Agent Project
 - Simple AI agent project using LangChain
 
 1) Use UV to create project. Below is the link to install UV Python package Manager
@@ -17,6 +17,6 @@ Running the project
 2) In the .env file add the following entry along with the API Key
    OPENAI_API_KEY=<API KEY>
 
-3) Run project using UV
+3) Run project using UV 
    uv run main.py
  
