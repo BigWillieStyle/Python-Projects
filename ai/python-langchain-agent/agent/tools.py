@@ -15,7 +15,7 @@
 
 from langchain.tools import tool, ToolRuntime
 
-from data import Context # import context schema class
+from agent.data import Context # import context schema class
 
 # Declare get weather for location tool
 @tool

@@ -1,11 +1,18 @@
 from langchain_openai import ChatOpenAI
 from langchain.agents import create_agent
 from langchain.agents.middleware import wrap_model_call, ModelRequest, ModelResponse
+from dotenv import load_dotenv
 
-from tools import agent_tools_list
+from agent import tools
+import os
 
-openai_basic_model = ChatOpenAI(model="gpt-4o-mini")
-openai_advanced_model = ChatOpenAI(model="gpt-4o")
+# Load the environment variables
+load_dotenv()
+
+# Create the OpenAI models
+_openai_basic_model = ChatOpenAI(model=os.getenv('OPENAI_MINI_NAME'))
+_openai_advanced_model = ChatOpenAI(model=os.getenv('OPENAI_MODEL_NAME'))
+
 
 @wrap_model_call
 def dynamic_model_selection(request: ModelRequest, handler) -> ModelResponse:
@@ -14,13 +21,14 @@ def dynamic_model_selection(request: ModelRequest, handler) -> ModelResponse:
 
     if message_count > 10:
         # Use an advanced model for longer conversations
-        model = openai_advanced_model
+        model = _openai_advanced_model
     else:
-        model = openai_basic_model
+        model = _openai_basic_model
 
     return handler(request.override(model=model))
 
+
 agent = create_agent(
-    model=openai_basic_model,  # Default model
-    tools=agent_tools_list,
+    model=_openai_basic_model,  # Default model
+    tools=tools.agent_tools_list,
     middleware=[dynamic_model_selection])
